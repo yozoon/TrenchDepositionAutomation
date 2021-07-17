@@ -10,17 +10,17 @@ PROJECT_DIRECTORY = path.dirname(__file__)
 with open(path.join(PROJECT_DIRECTORY, "parameters.template"), "r") as f:
     template_string = f.read()
 
-# Use the template to create the parameter file
+# Use the template to create the content of the parameter file
 s = Template(template_string)
 out = s.substitute(
     GEOMETRY_FILE=path.join(PROJECT_DIRECTORY, "trench.vtk"),
-    OUTPUT_PATH=path.join(PROJECT_DIRECTORY, "results"),
+    OUTPUT_PATH=path.join(PROJECT_DIRECTORY, "output", "results"),
     FD_SCHEME="LAX_FRIEDRICHS_1ST_ORDER",
     DEPOSITION_RATE="1.",
-    STICKING_PROBABILITY="1.",
+    STICKING_PROBABILITY="0.1",
     STATISTICAL_ACCURACY="1000.")
 
-# Create a temporary file containing the process definitions
+# Create a temporary file with the content we just generated
 # which can be used as an input for ViennaTS
 paramfile = NamedTemporaryFile(mode='w+')
 paramfile.file.write(out)

@@ -5,7 +5,7 @@ print_rates=false;
 print_velocities=false;
 print_materials=false;
 print_vtp=true;
-print_lvst=false;
+print_lvst=true;
 remove_bottom=false;
 
 output_path="$OUTPUT_PATH";
