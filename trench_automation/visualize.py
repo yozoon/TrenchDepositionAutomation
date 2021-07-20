@@ -2,31 +2,38 @@ import argparse
 from os import listdir, path
 
 import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
 
 from util import get_distances
 
 parser = argparse.ArgumentParser(
     description='Visualize interface lines of physical deposition models with different sticking probabilities.')
-parser.add_argument('DIR',
+parser.add_argument('csv',
                     type=str,
-                    help='results directory')
+                    help='CSV input file')
 
 
 def main():
     # Parse the command line arguments
     args = parser.parse_args()
+    df = pd.read_csv(args.csv, index_col=0)
 
-    tx, ty, distances = get_distances(args.DIR)
+    # Extract the geometry rows
+    tx = df.iloc[0].to_numpy()
+    ty = df.iloc[1].to_numpy()
 
-    sidewall_idx = np.where(np.bitwise_and(
-        np.bitwise_and(tx < 0, ty < -0.5), ty > np.min(ty)+0.5))
+    # Remove the geometry rows
+    df = df.iloc[2:]
 
-    for sticking_probability, distance in distances.items():
-        plt.plot(-ty[sidewall_idx], distance[sidewall_idx],
-                 label="$s=2^{-"+str(sticking_probability)+"}$")
+    # Mask off all elements except those contributing to the left sidewall
+    sidewall_mask = (tx < 0) & (ty < -0.5) & (ty > np.min(ty) + 0.5)
+
+    # Plot the results
+    for s, dist in df.iterrows():
+        plt.plot(-ty[sidewall_mask], dist[sidewall_mask],
+                 label=f"s={s}") #"$s=2^{-"+str(s)+"}$")
     plt.xlabel("Trench depth [nm]")
-    #plt.xlabel("element index along trench substrate interface line")
     plt.ylabel("Deposition thickness [nm]")
     plt.legend()
     plt.show()

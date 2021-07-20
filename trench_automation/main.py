@@ -1,5 +1,5 @@
-import argparse
-import subprocess
+from argparse import ArgumentParser
+from subprocess import Popen
 from os import path
 from string import Template
 from tempfile import NamedTemporaryFile
@@ -21,7 +21,7 @@ OUTPUT_DIR = path.join(PROJECT_DIRECTORY, "output")
 N = 12
 
 
-parser = argparse.ArgumentParser(
+parser = ArgumentParser(
     description='Run physical deposition simulations with different sticking probabilities.')
 parser.add_argument('CSV',
                     type=str,
@@ -65,8 +65,8 @@ def main():
         paramfile.file.flush()
 
         # Call ViennaTS with the just generated temporary process definition file
-        subprocess.Popen([VIENNATS_EXE, paramfile.name],
-                         cwd=PROJECT_DIRECTORY).wait()
+        Popen([VIENNATS_EXE, paramfile.name],
+              cwd=PROJECT_DIRECTORY).wait()
 
         # Close/ Destroy the tempfile
         paramfile.close()
@@ -85,15 +85,16 @@ def main():
         # Add the layer thickness to the array, but first append the current sticking probability to them
         deposition_thickness.append(np.insert(dist, 0, sticking_probability))
 
+    # Add the x and y coordinates of the trench geometry to the array
+    deposition_thickness.insert(0, np.insert(ty, 0, -1))
+    deposition_thickness.insert(0, np.insert(tx, 0, -1))
+
     # Convert the results into a pandas DataFrame
     df = pd.DataFrame(deposition_thickness)
     # Set the sticking probability as the index
     df.index = df[0]
     df.index.rename("sticking_probability", inplace=True)
     df.drop(0, inplace=True, axis=1)
-
-    # Use the tx, ty pairs as column names
-    df.columns = [(a, b) for a, b in zip(tx, ty)]
 
     # Print the DataFrame
     print(df)
