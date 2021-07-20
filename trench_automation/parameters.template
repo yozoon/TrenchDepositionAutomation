@@ -7,6 +7,7 @@ print_materials=false;
 print_vtp=true;
 print_lvst=false;
 remove_bottom=false;
+bits_per_distance=$DISTANCE_BITS;
 
 output_path="$OUTPUT_PATH";
 

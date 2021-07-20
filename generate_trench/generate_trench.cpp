@@ -2,14 +2,10 @@
 #include <pybind11/pybind11.h>
 
 #include <lsBooleanOperation.hpp>
-#include <lsExpand.hpp>
-#include <lsGeometricAdvect.hpp>
 #include <lsMakeGeometry.hpp>
-#include <lsToDiskMesh.hpp>
 #include <lsToMesh.hpp>
 #include <lsToSurfaceMesh.hpp>
 #include <lsVTKWriter.hpp>
-#include <lsWriteVisualizationMesh.hpp>
 
 namespace py = pybind11;
 
