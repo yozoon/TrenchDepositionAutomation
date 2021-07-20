@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.15)
 
 project("GenerateTrench")
 
@@ -33,7 +33,15 @@ SET(ViennaLS_DIR "${ViennaToolsDir}/ViennaLS/install/ViennaLS/lib/cmake/ViennaLS
 find_package(ViennaHRLE REQUIRED)
 find_package(ViennaLS REQUIRED)
 
-add_executable(${PROJECT_NAME} ${PROJECT_NAME}.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC ${VIENNALS_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${VIENNALS_LIBRARIES})
+find_package(Python COMPONENTS Interpreter Development)
+find_package(pybind11 CONFIG)
 
+# Python method:
+Python_add_library(generate_trench generate_trench.cpp)
+target_link_libraries(generate_trench PUBLIC pybind11::headers)
+target_include_directories(generate_trench PUBLIC ${VIENNALS_INCLUDE_DIRS})
+target_link_libraries(generate_trench PRIVATE ${VIENNALS_LIBRARIES})
+set_target_properties(generate_trench PROPERTIES
+                              INTERPROCEDURAL_OPTIMIZATION ON
+                              CXX_VISIBILITY_PRESET default
+                              VISIBLITY_INLINES_HIDDEN ON)

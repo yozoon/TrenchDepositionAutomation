@@ -5,7 +5,7 @@ print_rates=false;
 print_velocities=false;
 print_materials=false;
 print_vtp=true;
-print_lvst=true;
+print_lvst=false;
 remove_bottom=false;
 
 output_path="$OUTPUT_PATH";
@@ -36,8 +36,8 @@ processes={
         finite_difference_scheme=$FD_SCHEME;
         add_layer=1;
 
-        process_time=10;
-        output_volume={0,1,2,3,4,5,6,7,8,9,10};
+        process_time=$PROCESS_TIME;
+        output_volume={$OUTPUT_VOLUME};
 
         parameters= {
             direction = {0, -1, 0};
