@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
-from subprocess import Popen
 from os import path
 from string import Template
+from subprocess import Popen
 from tempfile import NamedTemporaryFile
 
 import numpy as np

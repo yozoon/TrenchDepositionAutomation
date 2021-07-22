@@ -1,10 +1,10 @@
-from os import path, listdir
+from os import listdir, path
 
 import numpy as np
+import sklearn.neighbors as neighbors
 import vtk
 from vtk.util.numpy_support import vtk_to_numpy
 
-import sklearn.neighbors as neighbors
 
 def extract_line(filename):
     # Read the VTP file
@@ -41,24 +41,3 @@ def line_to_distance(tx, ty, x, y):
         n_neighbors=1, metric="euclidean").fit(np.vstack([x, y]).T)
     dist, _ = nbrs.kneighbors(np.vstack([tx, ty]).T)
     return dist
-
-
-def get_distances(directory):
-    tx = None
-    ty = None
-    distances = {}
-    for subdir in listdir(directory):
-        i = int(subdir.split("_")[1])
-        #sticking_probability = float(subdir.split("_")[1])
-        # print(sticking_probability)
-        # Only extract the trench geometry once
-        if tx is None:
-            tx, ty, _ = extract_line(
-                path.join(directory, subdir, "Interface_0_0.vtp"))
-
-        x, y, _ = extract_line(
-            path.join(directory, subdir, "Interface_1_0.vtp"))
-
-        distances[i] = line_to_distance(tx, ty, x, y)
-
-    return tx, ty, distances

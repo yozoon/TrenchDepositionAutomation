@@ -2,10 +2,8 @@ import argparse
 from os import listdir, path
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
-
-from util import get_distances
+import pandas as pd
 
 parser = argparse.ArgumentParser(
     description='Visualize interface lines of physical deposition models with different sticking probabilities.')
@@ -32,8 +30,8 @@ def main():
     # Plot the results
     for s, dist in df.iterrows():
         plt.plot(-ty[sidewall_mask], dist[sidewall_mask],
-                 label=f"s={s}") #"$s=2^{-"+str(s)+"}$")
-    plt.xlabel("Trench depth [nm]")
+                 label=f"s={s}")  # "$s=2^{-"+str(s)+"}$")
+    plt.xlabel("y position [nm]")
     plt.ylabel("Deposition thickness [nm]")
     plt.legend()
     plt.show()
